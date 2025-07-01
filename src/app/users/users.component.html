@@ -2,11 +2,9 @@
   <h2>Users</h2>
 
   @for (user of users; track user.id) {
-  <div class="user-item">
-    <span class="user-name">{{ user.firstName }}</span>
-    <a class="view-details-link" [routerLink]="['/users', user.id]"
-      >View Details</a
-    >
-  </div>
+    <div class="user-item">
+      <span class="user-name">{{ user.name }}</span>
+      <a class="view-details-link" [routerLink]="['/users', user.id]">View Details</a>
+    </div>
   }
 </div>
