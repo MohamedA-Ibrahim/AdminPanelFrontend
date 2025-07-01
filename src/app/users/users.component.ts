@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { dummy_users } from '../dummy-users';
 
 @Component({
   selector: 'app-users',
@@ -8,9 +9,5 @@ import { RouterLink } from '@angular/router';
   styleUrl: './users.component.scss',
 })
 export class UsersComponent {
-  users = [
-    { id: 1, name: 'User 1' },
-    { id: 2, name: 'User 2' },
-    { id: 3, name: 'User 3' },
-  ];
+  users = dummy_users;
 }
