@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { dummy_users } from '../dummy-users';
+import { User } from '../User';
+import { UsersService } from '../users.service';
 
 @Component({
   selector: 'app-users',
@@ -8,6 +9,22 @@ import { dummy_users } from '../dummy-users';
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })
-export class UsersComponent {
-  users = dummy_users;
+export class UsersComponent implements OnInit {
+  users: User[] = [];
+  isLoading = false;
+
+  private usersService = inject(UsersService);
+
+  ngOnInit() {
+    this.isLoading = true;
+
+    this.usersService.getUsers().subscribe({
+      next: (resData) => {
+        this.users = resData;
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
+  }
 }

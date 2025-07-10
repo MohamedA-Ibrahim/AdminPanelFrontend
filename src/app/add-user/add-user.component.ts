@@ -16,13 +16,36 @@ export class AddUserComponent {
   email = '';
   phone = '';
 
+  message = '';
+  succeeded = false;
+  isSubmitting = false;
+
   onCancel() {}
   onSubmit() {
-    this.usersService.addUser({
+    const user = {
       firstName: this.firstName,
       lastName: this.lastName,
       email: this.email,
       phone: this.phone,
+    };
+
+    this.usersService.addUser(user).subscribe({
+      next: (response) => {
+        this.succeeded = true;
+        this.message = 'User added successfully';
+
+        this.firstName = '';
+        this.lastName = '';
+        this.email = '';
+        this.phone = '';
+      },
+      error: (err) => {
+        this.succeeded = false;
+        this.message = err.message;
+      },
+      complete: () => {
+        this.isSubmitting = false;
+      },
     });
   }
 }
