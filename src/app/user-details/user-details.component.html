@@ -1,13 +1,13 @@
 <div class="userDetailsContainer">
   @if(isLoading){
   <p>Loading...</p>
-  } @else { @if(currentUser){
+  } @else if(currentUser){
   <div>
     <div class="row">
       <span class="title"> Id: </span>
       <span>{{ currentUser.id }}</span>
     </div>
-    <div class="row"> 
+    <div class="row">
       <span class="title"> Name: </span>
       <span>
         {{ currentUser.firstName }}
@@ -27,5 +27,5 @@
   </div>
   } @else {
   <p>User not found</p>
-  } }
+  }
 </div>
