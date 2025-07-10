@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { UsersService } from '../users.service';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-add-user',
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './add-user.component.html',
   styleUrl: './add-user.component.scss',
 })
