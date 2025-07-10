@@ -1,12 +1,13 @@
 <div class="users-container">
   <h2>Users</h2>
 
+  <a [routerLink]="['/users/add']">Add User</a>
+
   @for (user of users; track user.id) {
   <div class="user-item">
     <span class="user-name">{{ user.firstName }}</span>
-    <a class="view-details-link" [routerLink]="['/users', user.id]"
-      >View Details</a
-    >
+<a class="view-details-link" [routerLink]="['/users', user.id, 'details']">Details</a>
+    <button (click)="deleteUser()">Delete</button>
   </div>
   }
 </div>

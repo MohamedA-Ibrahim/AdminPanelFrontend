@@ -27,4 +27,8 @@ export class UsersComponent implements OnInit {
       },
     });
   }
+
+  deleteUser(){
+    
+  }
 }
