@@ -19,11 +19,11 @@ export class UserDetailsComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.userId = params['id'];
-      this.loadUserDetails(Number(this.userId));
+if (this.userId) this.loadUserDetails(this.userId);
     });
   }
 
-  loadUserDetails(userId: number) {
+  loadUserDetails(userId: string) {
     this.isLoading = true;
 
     setTimeout(() => {
