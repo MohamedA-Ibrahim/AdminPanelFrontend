@@ -42,7 +42,7 @@ export class AddUserComponent {
       },
       error: (err) => {
         this.succeeded = false;
-        this.message = err.message;
+        this.message = err.error;
       },
       complete: () => {
         this.isSubmitting = false;
