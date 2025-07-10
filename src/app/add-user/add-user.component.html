@@ -14,8 +14,16 @@
         type="text"
         id="first-name"
         name="first-name"
+        required
+        minlength="2"
         [(ngModel)]="firstName"
+        #firstNameValidator="ngModel"
       />
+
+      @if (firstNameValidator.invalid && (firstNameValidator.dirty ||
+      firstNameValidator.touched)) {
+      <p class="alert">First Name is required.</p>
+      }
     </div>
 
     <div class="form-group">
@@ -24,17 +32,38 @@
         type="text"
         id="last-name"
         name="last-name"
+        required
+        minlength="2"
         [(ngModel)]="lastName"
+        #lastNameValidator="ngModel"
       />
+
+      @if (lastNameValidator.invalid && (lastNameValidator.dirty || lastNameValidator.touched)) {
+      <p class="alert">Last Name is required.</p>
+      }
     </div>
 
     <div class="form-group">
       <label for="email">Email</label>
-      <input type="text" id="email" name="email" [(ngModel)]="email" />
+      <input type="text" id="email" name="email" required email [(ngModel)]="email" #emailValidator="ngModel" />
+      @if (emailValidator.invalid && (emailValidator.dirty || emailValidator.touched)) {
+      <p class="alert">Email must be valid.</p>
+      }
     </div>
     <div class="form-group">
       <label for="phone">Phone</label>
-      <input type="text" id="phone" name="phone" [(ngModel)]="phone" />
+      <input
+        type="text"
+        id="phone"
+        name="phone"
+        required
+        minlength="2"
+        [(ngModel)]="phone"
+        #phoneValidator="ngModel"
+      />
+      @if (phoneValidator.invalid && (phoneValidator.dirty || phoneValidator.touched)) {
+      <p class="alert">Phone is required.</p>
+      }
     </div>
 
     <div class="actions">
