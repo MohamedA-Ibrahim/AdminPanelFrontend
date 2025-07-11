@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class AddUserComponent {
   private usersService = inject(UsersService);
-  private router = inject(Router)
+  private router = inject(Router);
   firstName = '';
   lastName = '';
   email = '';
@@ -23,7 +23,7 @@ export class AddUserComponent {
   isSubmitting = false;
 
   onCancel() {
-   this.router.navigate(['/users'])
+    this.router.navigate(['/users']);
   }
   onSubmit() {
     const user = {
@@ -38,10 +38,7 @@ export class AddUserComponent {
         this.succeeded = true;
         this.message = 'User added successfully';
 
-        this.firstName = '';
-        this.lastName = '';
-        this.email = '';
-        this.phone = '';
+        this.router.navigate(['/users', response.id, 'details']);
       },
       error: (err) => {
         this.succeeded = false;
