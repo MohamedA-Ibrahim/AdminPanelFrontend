@@ -1,6 +1,24 @@
-<div>
-  <span>User id is:</span>
-  <span>
-    {{ userId }}
-  </span>
+<div class="user-details-container">
+  <h2>User Details</h2>
+  @if(isLoading){
+    <p>Loading...</p>
+  } @else if(currentUser){
+    <div class="user-details-card">
+      <div class="row">
+        <span class="title">Name:</span>
+        <span>{{ currentUser.firstName }}</span>
+        <span>{{ currentUser.lastName }}</span>
+      </div>
+      <div class="row">
+        <span class="title">Email:</span>
+        <span>{{ currentUser.email }}</span>
+      </div>
+      <div class="row">
+        <span class="title">Phone:</span>
+        <span>{{ currentUser.phone }}</span>
+      </div>
+    </div>
+  } @else {
+    <p>User not found</p>
+  }
 </div>
