@@ -2,10 +2,11 @@ import { inject, Injectable } from '@angular/core';
 import { AddUser } from './add-user/add-user.model';
 import { HttpClient } from '@angular/common/http';
 import { User } from './User';
+import { environment } from '../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class UsersService {
-  baseUrl = 'https://localhost:7147/api';
+  baseUrl = environment.apiUrl;
 
   private httpClient = inject(HttpClient);
 
