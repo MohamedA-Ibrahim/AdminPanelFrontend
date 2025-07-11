@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { UsersService } from '../users.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-user',
@@ -11,7 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 export class AddUserComponent {
   private usersService = inject(UsersService);
-
+  private router = inject(Router)
   firstName = '';
   lastName = '';
   email = '';
@@ -21,7 +22,9 @@ export class AddUserComponent {
   succeeded = false;
   isSubmitting = false;
 
-  onCancel() {}
+  onCancel() {
+   this.router.navigate(['/users'])
+  }
   onSubmit() {
     const user = {
       firstName: this.firstName,
