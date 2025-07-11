@@ -7,7 +7,7 @@
   </div>
   }
 
-  <form (ngSubmit)="onSubmit()" class="add-user-form">
+  <form (ngSubmit)="onSubmit()" class="add-user-form" #userForm="ngForm">
     <div class="form-group">
       <label for="first-name">First name</label>
       <input
@@ -68,7 +68,7 @@
 
     <div class="actions">
       <button type="button" (click)="onCancel()">Cancel</button>
-      <button type="submit">Create</button>
+      <button type="submit" [disabled]="!userForm.valid">Create</button>
     </div>
   </form>
 </div>
