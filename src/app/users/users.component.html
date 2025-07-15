@@ -6,7 +6,10 @@
   @if(isLoading){
 
   <mat-spinner class="spinner" />
+  } @else{ @if(!users.length) {
+  <p>No users.</p>
   } @else{
+
   <table mat-table [dataSource]="users">
     <mat-text-column name="firstName"></mat-text-column>
     <mat-text-column name="lastName"></mat-text-column>
@@ -23,6 +26,5 @@
     <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
     <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
   </table>
-
-  }
+  } }
 </div>
