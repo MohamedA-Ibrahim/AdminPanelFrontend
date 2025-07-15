@@ -4,10 +4,11 @@ import { User } from '../User';
 import { UsersService } from '../users.service';
 import Swal from 'sweetalert2';
 import { MatTableModule } from '@angular/material/table';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-users',
-  imports: [RouterLink, MatTableModule],
+  imports: [RouterLink, MatTableModule,MatProgressSpinnerModule],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })

@@ -3,6 +3,10 @@
 
   <a class="add-user-link" [routerLink]="['/users/add']">Add User</a>
 
+  @if(isLoading){
+
+  <mat-spinner class="spinner" />
+  } @else{
   <table mat-table [dataSource]="users">
     <mat-text-column name="firstName"></mat-text-column>
     <mat-text-column name="lastName"></mat-text-column>
@@ -19,4 +23,6 @@
     <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
     <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
   </table>
+
+  }
 </div>
