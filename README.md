@@ -2,6 +2,8 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.15.
 
+[![Build, test, and lint](https://github.com/MohamedA-Ibrahim/AdminPanelFrontend/actions/workflows/build.yml/badge.svg)](https://github.com/MohamedA-Ibrahim/AdminPanelFrontend/actions/workflows/build.yml)
+
 ## Development server
 
 To start a local development server, run:
