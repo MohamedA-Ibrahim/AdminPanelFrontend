@@ -15,6 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class UsersComponent implements OnInit {
   users: User[] = [];
   isLoading = false;
+  isError = false;
 
   private usersService = inject(UsersService);
   private snackBar = inject(MatSnackBar);
@@ -28,8 +29,10 @@ export class UsersComponent implements OnInit {
       },
       error: (err) => {
         console.error(err.message);
+        
+        this.isError = true;
         this.snackBar.open('Failed to get users due to server error', 'ok', {
-          duration: 3000
+          duration: 7000,
         });
         this.isLoading = false;
       },

@@ -8,6 +8,8 @@
   <mat-spinner class="spinner" />
   } @else{ @if(!users.length) {
   <p>No users.</p>
+  } @else if(isError) {
+  <p>An error ocurred during retreiving data.</p>
   } @else{
 
   <table mat-table [dataSource]="users">
