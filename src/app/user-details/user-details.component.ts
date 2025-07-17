@@ -10,13 +10,14 @@ import { UsersService } from '../users.service';
   styleUrl: './user-details.component.scss',
 })
 export class UserDetailsComponent implements OnInit {
+
   userId: string | null = null;
-  isLoading: boolean = false;
+  isLoading = false;
   currentUser: User | undefined;
 
   private usersService = inject(UsersService);
+  private route = inject(ActivatedRoute);
 
-  constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
