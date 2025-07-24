@@ -5,9 +5,9 @@ name: Build, test, and lint
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "AddUserTestsDemo" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "AddUserTestsDemo" ]
 
 jobs:
   build:
