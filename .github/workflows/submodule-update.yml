@@ -2,7 +2,7 @@ name: Dispatch Update Submodule
 on:
   push:
     branches:
-      - AddUserTests
+      - master
 jobs:
   dispatch:
     runs-on: ubuntu-latest
