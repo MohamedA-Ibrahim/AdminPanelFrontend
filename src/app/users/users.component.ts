@@ -16,7 +16,7 @@ import { UsersTableComponent } from "./users-table/users-table.component";
   imports: [
     RouterLink,
     MatProgressSpinnerModule,
-    UsersTableComponent
+    UsersTableComponent,
 ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
