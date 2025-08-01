@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -22,9 +22,9 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './delete-dialog.component.html',
   styleUrl: './delete-dialog.component.scss',
 })
-export class DeleteDialogComponent {
-   constructor(
-    public dialogRef: MatDialogRef<DeleteDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { name: string }
-  ) {}
+export class DeleteDialogComponent {   dialogRef = inject<MatDialogRef<DeleteDialogComponent>>(MatDialogRef);
+   data = inject<{
+    name: string;
+}>(MAT_DIALOG_DATA);
+
 }
