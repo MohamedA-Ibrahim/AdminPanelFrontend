@@ -8,6 +8,7 @@ import { UsersTableComponent } from './users-table/users-table.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
+import { OrderBy } from './OrderBy';
 
 @Component({
   selector: 'app-users',
@@ -19,31 +20,40 @@ export class UsersComponent implements OnInit {
   users: User[] = [];
   isLoading = false;
   isError = false;
+  orderBy: OrderBy | null = null;
+  search: string | null = null;
+  orderASC = false;
 
   private usersService = inject(UsersService);
   private snackBar = inject(MatSnackBar);
   readonly dialog = inject(MatDialog);
 
   ngOnInit() {
+    this.getUsers();
+  }
+
+  getUsers() {
     this.isLoading = true;
 
-    this.usersService.getUsers().subscribe({
-      next: (resData) => {
-        this.users = resData;
-      },
-      error: (err) => {
-        console.error(err.message);
+    this.usersService
+      .getUsersFiltered(this.search, this.orderASC, this.orderBy)
+      .subscribe({
+        next: (resData) => {
+          this.users = resData;
+        },
+        error: (err) => {
+          console.error(err.message);
 
-        this.isError = true;
-        this.snackBar.open('Failed to get users due to server error', 'ok', {
-          duration: 7000,
-        });
-        this.isLoading = false;
-      },
-      complete: () => {
-        this.isLoading = false;
-      },
-    });
+          this.isError = true;
+          this.snackBar.open('Failed to get users due to server error', 'ok', {
+            duration: 7000,
+          });
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+        },
+      });
   }
 
   deleteUser(id: string) {
@@ -82,5 +92,17 @@ export class UsersComponent implements OnInit {
     this.dialog.open(DeleteDialogComponent, {
       width: '250px',
     });
+  }
+
+  sortChanged(sort: { orderASC: boolean; orderBy: OrderBy | null }) {
+    this.orderASC = sort.orderASC;
+    this.orderBy = sort.orderBy;
+
+    this.getUsers();
+  }
+
+  filterChanged(filter: string) {
+    this.search = filter;
+    this.getUsers();
   }
 }

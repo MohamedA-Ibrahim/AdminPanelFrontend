@@ -10,8 +10,11 @@
   <p>No users.</p>
   } @else if(isError) {
   <p>An error ocurred during retreiving data.</p>
-  } @else{
-  <app-users-table [users]="users" (deleteUserEvent)="deleteUser($event)" />
-
-  } }
+  }}
+  <app-users-table
+    [users]="users"
+    (deleteUserEvent)="deleteUser($event)"
+    (sortChanged)="sortChanged($event)"
+    (filterChanged)="filterChanged($event)"
+  />
 </div>
