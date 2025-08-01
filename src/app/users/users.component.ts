@@ -1,23 +1,17 @@
-import {
-  Component,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { User } from '../User';
 import { UsersService } from '../users.service';
-import Swal from 'sweetalert2';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UsersTableComponent } from "./users-table/users-table.component";
+import { UsersTableComponent } from './users-table/users-table.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
+import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
 
 @Component({
   selector: 'app-users',
-  imports: [
-    RouterLink,
-    MatProgressSpinnerModule,
-    UsersTableComponent,
-],
+  imports: [RouterLink, MatProgressSpinnerModule, UsersTableComponent],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })
@@ -28,6 +22,7 @@ export class UsersComponent implements OnInit {
 
   private usersService = inject(UsersService);
   private snackBar = inject(MatSnackBar);
+  readonly dialog = inject(MatDialog);
 
   ngOnInit() {
     this.isLoading = true;
@@ -52,26 +47,40 @@ export class UsersComponent implements OnInit {
   }
 
   deleteUser(id: string) {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'Do you really want to delete this user?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: {
+        name: 'user',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
         this.usersService.removeUser(id).subscribe({
           next: () => {
             this.users = this.users.filter((user) => user.id !== id);
-            Swal.fire('Deleted!', 'User has been deleted.', 'success');
+            this.dialog.open(AlertDialogComponent, {
+              data: {
+                title: 'Deleted!',
+                message: 'User has been deleted.',
+              },
+            });
           },
           error: (err) => {
-            Swal.fire('Error', 'Failed to delete user: ' + err.error, 'error');
+            this.dialog.open(AlertDialogComponent, {
+              data: {
+                title: 'Error',
+                message: 'Failed to delete user: ' + err.error,
+              },
+            });
           },
         });
       }
+    });
+  }
+
+  openDialog(): void {
+    this.dialog.open(DeleteDialogComponent, {
+      width: '250px',
     });
   }
 }

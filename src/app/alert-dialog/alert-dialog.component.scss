@@ -1,0 +1,17 @@
+mat-dialog-content {
+  font-size: 16px;
+  color: #333;
+  padding: 10px 0;
+}
+
+mat-dialog-title {
+  padding: 10px 0;
+}
+mat-dialog-actions {
+  padding-top: 15px;
+}
+
+button[mat-button] {
+  color: #1976d2; // Use your theme's primary color
+  font-weight: 500;
+}
