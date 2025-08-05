@@ -3,8 +3,10 @@ import { UsersComponent } from './users/users.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { AddUserComponent } from './add-user/add-user.component';
 import { LoginComponent } from './login/login.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 export const routes: Routes = [
+  { path: '', component: DashboardComponent },
   { path: 'users', component: UsersComponent },
   { path: 'users/add', component: AddUserComponent },
   { path: 'users/:id/details', component: UserDetailsComponent },
