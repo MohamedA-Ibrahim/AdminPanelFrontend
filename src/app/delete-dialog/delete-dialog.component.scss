@@ -1,0 +1,20 @@
+    .dialog-container {
+      padding: 24px;
+      font-family: Roboto, sans-serif;
+    }
+
+    .dialog-header {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+
+    .dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 24px;
+    }
+
+    button {
+      margin-left: 8px;
+    }

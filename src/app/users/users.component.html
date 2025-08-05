@@ -1,8 +1,9 @@
 <div class="users-container">
   <h2>Users</h2>
 
+  @if(isLoggedIn) {
   <a class="add-user-link" [routerLink]="['/users/add']">Add User</a>
-
+  } 
   @if(isLoading){
 
   <mat-spinner class="spinner" />
@@ -10,23 +11,11 @@
   <p>No users.</p>
   } @else if(isError) {
   <p>An error ocurred during retreiving data.</p>
-  } @else{
-
-  <table mat-table [dataSource]="users">
-    <mat-text-column name="firstName"></mat-text-column>
-    <mat-text-column name="lastName"></mat-text-column>
-    <mat-text-column name="email"></mat-text-column>
-    <mat-text-column name="phone"></mat-text-column>
-
-    <ng-container matColumnDef="action">
-      <th mat-header-cell *matHeaderCellDef>Actions</th>
-      <td mat-cell *matCellDef="let user">
-        <button (click)="deleteUser(user.id)">Delete</button>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-    <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
-  </table>
-  } }
+  }}
+  <app-users-table
+    [users]="users"
+    (deleteUserEvent)="deleteUser($event)"
+    (sortChanged)="sortChanged($event)"
+    (filterChanged)="filterChanged($event)"
+  />
 </div>
