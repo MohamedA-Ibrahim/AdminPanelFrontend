@@ -6,9 +6,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -28,8 +28,8 @@ export class LoginComponent {
   password = '';
   showSpinner = false;
   private http = inject(HttpClient);
-  private router = inject(Router);
   private dialog = inject(MatDialog);
+  private location = inject(Location);
 
   login() {
     if (!this.username || !this.password) {
@@ -53,7 +53,7 @@ export class LoginComponent {
         next: (response) => {
           localStorage.setItem('token', response.token);
           localStorage.setItem('userName', response.userName);
-          this.router.navigate(['/']);
+          this.location.back();
         },
         error: (err) => {
           this.dialog.open(AlertDialogComponent, {
