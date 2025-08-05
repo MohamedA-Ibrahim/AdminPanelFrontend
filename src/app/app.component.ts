@@ -23,4 +23,18 @@ import { MatListModule } from '@angular/material/list';
 })
 export class AppComponent {
   title = 'AdminPanelFrontend';
+  
+  get isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
+  get userName(): string | null {
+    return localStorage.getItem('userName');
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userName');
+    window.location.reload();
+  }
 }

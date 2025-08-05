@@ -32,6 +32,10 @@ export class UsersComponent implements OnInit {
     this.getUsers();
   }
 
+  get isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
+  
   getUsers() {
     this.isLoading = true;
 

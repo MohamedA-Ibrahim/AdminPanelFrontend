@@ -79,4 +79,8 @@ export class UsersTableComponent implements AfterViewInit, OnChanges {
 
     this.sortChanged.emit({ orderASC: orderASC, orderBy: order });
   }
+
+    get isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
 }
