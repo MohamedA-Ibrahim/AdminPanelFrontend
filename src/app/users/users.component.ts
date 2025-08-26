@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
 import { OrderBy } from './OrderBy';
+import { SnackBarContentComponent } from '../snack-bar-content/snack-bar-content.component';
 
 @Component({
   selector: 'app-users',
@@ -35,7 +36,7 @@ export class UsersComponent implements OnInit {
   get isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
   }
-  
+
   getUsers() {
     this.isLoading = true;
 
@@ -43,15 +44,34 @@ export class UsersComponent implements OnInit {
       .getUsersFiltered(this.search, this.orderASC, this.orderBy)
       .subscribe({
         next: (resData) => {
-          this.users = resData;
+          this.users = resData.body!;
+
+          const cacheStatus = resData.headers.get('X-Cache');
+
+          this.snackBar.openFromComponent(SnackBarContentComponent, {
+            data: {
+              content:
+                cacheStatus === 'HIT'
+                  ? 'Loaded from cache'
+                  : 'Loaded from database',
+              success: true,
+            },
+            duration: 4000,
+          });
         },
         error: (err) => {
           console.error(err.message);
 
           this.isError = true;
-          this.snackBar.open('Failed to get users due to server error', 'ok', {
-            duration: 7000,
+
+          this.snackBar.openFromComponent(SnackBarContentComponent, {
+            data: {
+              content: 'Failed to get users due to server error',
+              success: false,
+            },
+            duration: 4000,
           });
+
           this.isLoading = false;
         },
         complete: () => {

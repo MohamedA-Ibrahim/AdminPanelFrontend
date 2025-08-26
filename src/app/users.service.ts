@@ -29,6 +29,7 @@ export class UsersService {
 
     return this.httpClient.get<User[]>(url, {
       params: params,
+      observe: 'response',
     });
   }
   addUser(user: AddUser) {
