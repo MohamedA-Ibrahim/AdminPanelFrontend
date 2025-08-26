@@ -61,17 +61,7 @@ export class UsersComponent implements OnInit {
         },
         error: (err) => {
           console.error(err.message);
-
           this.isError = true;
-
-          this.snackBar.openFromComponent(SnackBarContentComponent, {
-            data: {
-              content: 'Failed to get users due to server error',
-              success: false,
-            },
-            duration: 4000,
-          });
-
           this.isLoading = false;
         },
         complete: () => {
