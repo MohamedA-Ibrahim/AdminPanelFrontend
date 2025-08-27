@@ -36,9 +36,9 @@ export class AddUserComponent {
     this.usersService.addUser(user).subscribe({
       next: (response) => {
         this.succeeded = true;
-        this.message = 'User added successfully';
+        this.message = 'Task queued for processing';
 
-        this.router.navigate(['/users', response.id, 'details']);
+        this.router.navigate(['/users']);
       },
       error: (err) => {
         this.succeeded = false;
