@@ -34,7 +34,7 @@ export class AddUserComponent {
     };
 
     this.usersService.addUser(user).subscribe({
-      next: (response) => {
+      next: () => {
         this.succeeded = true;
         this.message = 'Task queued for processing';
 
