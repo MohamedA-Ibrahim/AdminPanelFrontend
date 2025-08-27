@@ -34,11 +34,13 @@ export class AddUserComponent {
     };
 
     this.usersService.addUser(user).subscribe({
-      next: () => {
+      next: (response) => {
         this.succeeded = true;
         this.message = 'Task queued for processing';
 
-        this.router.navigate(['/users']);
+        this.router.navigate(['/users'], {
+          queryParams: { id: response.id },
+        });
       },
       error: (err) => {
         this.succeeded = false;

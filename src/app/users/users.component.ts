@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { User } from '../User';
 import { UsersService } from '../users.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -10,6 +10,7 @@ import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component'
 import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
 import { OrderBy } from './OrderBy';
 import { SnackBarContentComponent } from '../snack-bar-content/snack-bar-content.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -17,7 +18,7 @@ import { SnackBarContentComponent } from '../snack-bar-content/snack-bar-content
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent implements OnInit, OnDestroy {
   users: User[] = [];
   isLoading = false;
   isError = false;
@@ -28,9 +29,20 @@ export class UsersComponent implements OnInit {
   private usersService = inject(UsersService);
   private snackBar = inject(MatSnackBar);
   readonly dialog = inject(MatDialog);
+  private route = inject(ActivatedRoute);
+
+  private addedUserId?: string;
+  private retrySub?: Subscription;
 
   ngOnInit() {
-    this.getUsers();
+    this.route.queryParams.subscribe((params) => {
+      this.addedUserId = params['id'] ?? null;
+      this.getUsers();
+    });
+  }
+
+  ngOnDestroy() {
+    this.retrySub?.unsubscribe();
   }
 
   get isLoggedIn(): boolean {
@@ -58,6 +70,24 @@ export class UsersComponent implements OnInit {
             },
             duration: 4000,
           });
+
+          if (this.addedUserId) {
+            const found = this.users.some((u) => u.id === this.addedUserId);
+
+            if (!found) {
+              this.pollForUser();
+            } else {
+              // User is found, clear id so we stop retrying
+              this.addedUserId = undefined;
+              this.snackBar.openFromComponent(SnackBarContentComponent, {
+                data: {
+                  content: 'New user has been added!',
+                  success: true,
+                },
+                duration: 3000,
+              });
+            }
+          }
         },
         error: (err) => {
           console.error(err.message);
@@ -68,6 +98,19 @@ export class UsersComponent implements OnInit {
           this.isLoading = false;
         },
       });
+  }
+
+  pollForUser() {
+    const snackBar = this.snackBar.openFromComponent(SnackBarContentComponent, {
+      data: { content: 'Still processing...', success: true },
+      duration: 4000,
+    });
+
+    snackBar.afterDismissed().subscribe(() => {
+      if (this.addedUserId) {
+        this.getUsers();
+      }
+    });
   }
 
   deleteUser(id: string) {
