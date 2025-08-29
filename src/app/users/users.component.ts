@@ -32,11 +32,13 @@ export class UsersComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
 
   private addedUserId?: string;
+  private retryCount = 0;
   private retrySub?: Subscription;
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
       this.addedUserId = params['id'] ?? null;
+      this.retryCount = 0;
       this.getUsers();
     });
   }
@@ -75,7 +77,20 @@ export class UsersComponent implements OnInit, OnDestroy {
             const found = this.users.some((u) => u.id === this.addedUserId);
 
             if (!found) {
-              this.pollForUser();
+              if (this.retryCount < 3) {
+                this.retryCount++;
+                this.pollForUser();
+              } else {
+                this.addedUserId = undefined;
+                this.snackBar.openFromComponent(SnackBarContentComponent, {
+                  data: {
+                    content:
+                      'User not found after several attempts. Please try again later.',
+                    success: false,
+                  },
+                  duration: 4000,
+                });
+              }
             } else {
               // User is found, clear id so we stop retrying
               this.addedUserId = undefined;
