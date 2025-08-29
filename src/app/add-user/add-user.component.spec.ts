@@ -137,7 +137,9 @@ describe('AddUserComponent', () => {
 
     expect(component.succeeded).toBeTrue();
     expect(component.message).toBe('Task queued for processing');
-    expect(spyNav).toHaveBeenCalledWith(['/users']);
+    expect(spyNav).toHaveBeenCalledWith(['/users'], {
+          queryParams: { id: 42 },
+        });
   }));
 
   it('should display error message on addUser failure', fakeAsync(() => {
