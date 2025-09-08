@@ -26,17 +26,18 @@ export class UsersComponent implements OnInit, OnDestroy {
   search: string | null = null;
   orderASC = false;
 
-  private usersService = inject(UsersService);
-  private snackBar = inject(MatSnackBar);
-  readonly dialog = inject(MatDialog);
-  private route = inject(ActivatedRoute);
+  private readonly usersService = inject(UsersService);
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly dialog = inject(MatDialog);
+  private readonly route = inject(ActivatedRoute);
 
   private addedUserId?: string;
   private retryCount = 0;
   private retrySub?: Subscription;
+  private queryParamsSub?: Subscription;
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
+    this.queryParamsSub = this.route.queryParams.subscribe((params) => {
       this.addedUserId = params['id'] ?? null;
       this.retryCount = 0;
       this.getUsers();
@@ -45,6 +46,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.retrySub?.unsubscribe();
+    this.queryParamsSub?.unsubscribe();
   }
 
   get isLoggedIn(): boolean {
@@ -121,7 +123,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       duration: 4000,
     });
 
-    snackBar.afterDismissed().subscribe(() => {
+    this.retrySub = snackBar.afterDismissed().subscribe(() => {
       if (this.addedUserId) {
         this.getUsers();
       }
