@@ -23,7 +23,6 @@ export class UsersComponent implements OnInit, OnDestroy {
   isLoading = false;
   isError = false;
   orderBy: OrderBy | null = null;
-  search: string | null = null;
   orderASC = false;
 
   private readonly usersService = inject(UsersService);
@@ -53,11 +52,32 @@ export class UsersComponent implements OnInit, OnDestroy {
     return !!localStorage.getItem('token');
   }
 
+  searchUsers(query: string) {
+    this.isLoading = true;
+    this.usersService.searchUsers(query).subscribe({
+      next: (users) => {
+        this.users = users;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.isError = true;
+        this.isLoading = false;
+        this.snackBar.openFromComponent(SnackBarContentComponent, {
+          data: {
+            content: 'Error searching users',
+            success: false,
+          },
+          duration: 4000,
+        });
+      }
+    });
+  }
+
   getUsers() {
     this.isLoading = true;
 
     this.usersService
-      .getUsersFiltered(this.search, this.orderASC, this.orderBy)
+      .getUsersFiltered(this.orderASC, this.orderBy)
       .subscribe({
         next: (resData) => {
           this.users = resData.body!;
@@ -130,6 +150,10 @@ export class UsersComponent implements OnInit, OnDestroy {
     });
   }
 
+  filterChanged(query: string) {
+    this.searchUsers(query);
+  }
+
   deleteUser(id: string) {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       data: {
@@ -172,11 +196,6 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.orderASC = sort.orderASC;
     this.orderBy = sort.orderBy;
 
-    this.getUsers();
-  }
-
-  filterChanged(filter: string) {
-    this.search = filter;
     this.getUsers();
   }
 }

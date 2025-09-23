@@ -4,7 +4,9 @@ import {
   ViewChild,
   AfterViewInit,
   Output,
-  EventEmitter, OnChanges,
+  EventEmitter, 
+  OnChanges,
+  OnDestroy,
 } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { User } from '../../User';
@@ -12,6 +14,7 @@ import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { OrderBy } from '../OrderBy';
+import { Subject, debounceTime, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-users-table',
@@ -25,7 +28,7 @@ import { OrderBy } from '../OrderBy';
   templateUrl: './users-table.component.html',
   styleUrl: './users-table.component.scss',
 })
-export class UsersTableComponent implements AfterViewInit, OnChanges {
+export class UsersTableComponent implements AfterViewInit, OnChanges, OnDestroy {
   dataSource = new MatTableDataSource<User>();
   columnsToDisplay = ['firstName', 'lastName', 'email', 'phone', 'action'];
 
@@ -38,6 +41,20 @@ export class UsersTableComponent implements AfterViewInit, OnChanges {
   @Output() filterChanged = new EventEmitter<string>();
 
   @ViewChild(MatSort) sort!: MatSort;
+  
+  private searchSubject = new Subject<string>();
+  private destroy$ = new Subject<void>();
+
+  constructor() {
+    this.searchSubject
+      .pipe(
+        debounceTime(300),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(value => {
+        this.filterChanged.emit(value);
+      });
+  }
 
   ngAfterViewInit() {
     this.dataSource.data = this.users;
@@ -54,7 +71,12 @@ export class UsersTableComponent implements AfterViewInit, OnChanges {
 
   onSearch(event: Event) {
     const searchValue = (event.target as HTMLInputElement).value;
-    this.filterChanged.emit(searchValue);
+    this.searchSubject.next(searchValue);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   onSortChange(event: Sort) {
