@@ -59,7 +59,7 @@ export class UsersComponent implements OnInit, OnDestroy {
         this.users = users;
         this.isLoading = false;
       },
-      error: (error) => {
+      error: () => {
         this.isError = true;
         this.isLoading = false;
         this.snackBar.openFromComponent(SnackBarContentComponent, {
