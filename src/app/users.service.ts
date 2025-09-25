@@ -17,14 +17,12 @@ export class UsersService {
     return this.httpClient.get<User[]>(url);
   }
   getUsersFiltered(
-    search: string | null,
     orderASC: boolean,
     orderBy: OrderBy | null
   ) {
     const url = this.baseUrl + '/users';
 
     let params = new HttpParams().set('orderASC', orderASC);
-    if (search) params = params.set('search', search);
     if (orderBy !== null) params = params.set('orderBy', orderBy);
 
     return this.httpClient.get<User[]>(url, {
@@ -48,5 +46,12 @@ export class UsersService {
     const url = `${this.baseUrl}/users/${id}`;
 
     return this.httpClient.get<User>(url);
+  }
+
+  searchUsers(query: string) {
+    const url = `${this.baseUrl}/users/search`;
+    const params = new HttpParams().set('query', query);
+
+    return this.httpClient.get<User[]>(url, { params });
   }
 }
