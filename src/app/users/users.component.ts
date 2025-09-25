@@ -150,10 +150,6 @@ export class UsersComponent implements OnInit, OnDestroy {
     });
   }
 
-  filterChanged(query: string) {
-    this.searchUsers(query);
-  }
-
   deleteUser(id: string) {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       data: {
