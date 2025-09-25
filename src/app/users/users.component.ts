@@ -59,84 +59,84 @@ export class UsersComponent implements OnInit, OnDestroy {
         this.users = users;
         this.isLoading = false;
       },
-      error: () => {
-        this.isError = true;
-        this.isLoading = false;
-        this.snackBar.openFromComponent(SnackBarContentComponent, {
-          data: {
-            content: 'Error searching users',
-            success: false,
-          },
-          duration: 4000,
-        });
-      }
+      error: (err) => {
+        this.showError(err);
+      },
     });
   }
 
   getUsers() {
     this.isLoading = true;
 
-    this.usersService
-      .getUsersFiltered(this.orderASC, this.orderBy)
-      .subscribe({
-        next: (resData) => {
-          this.users = resData.body!;
+    this.usersService.getUsersFiltered(this.orderASC, this.orderBy).subscribe({
+      next: (resData) => {
+        this.users = resData.body!;
 
-          const cacheStatus = resData.headers.get('X-Cache');
+        const cacheStatus = resData.headers.get('X-Cache');
 
-          this.snackBar.openFromComponent(SnackBarContentComponent, {
-            data: {
-              content:
-                cacheStatus === 'HIT'
-                  ? 'Loaded from cache'
-                  : 'Loaded from database',
-              success: true,
-            },
-            duration: 4000,
-          });
+        this.snackBar.openFromComponent(SnackBarContentComponent, {
+          data: {
+            content:
+              cacheStatus === 'HIT'
+                ? 'Loaded from cache'
+                : 'Loaded from database',
+            success: true,
+          },
+          duration: 4000,
+        });
 
-          if (this.addedUserId) {
-            const found = this.users.some((u) => u.id === this.addedUserId);
+        if (this.addedUserId) {
+          const found = this.users.some((u) => u.id === this.addedUserId);
 
-            if (!found) {
-              if (this.retryCount < 3) {
-                this.retryCount++;
-                this.pollForUser();
-              } else {
-                this.addedUserId = undefined;
-                this.snackBar.openFromComponent(SnackBarContentComponent, {
-                  data: {
-                    content:
-                      'User not found after several attempts. Please try again later.',
-                    success: false,
-                  },
-                  duration: 4000,
-                });
-              }
+          if (!found) {
+            if (this.retryCount < 3) {
+              this.retryCount++;
+              this.pollForUser();
             } else {
-              // User is found, clear id so we stop retrying
               this.addedUserId = undefined;
               this.snackBar.openFromComponent(SnackBarContentComponent, {
                 data: {
-                  content: 'New user has been added!',
-                  success: true,
+                  content:
+                    'User not found after several attempts. Please try again later.',
+                  success: false,
                 },
-                duration: 3000,
+                duration: 4000,
               });
             }
+          } else {
+            // User is found, clear id so we stop retrying
+            this.addedUserId = undefined;
+            this.snackBar.openFromComponent(SnackBarContentComponent, {
+              data: {
+                content: 'New user has been added!',
+                success: true,
+              },
+              duration: 3000,
+            });
           }
-        },
-        error: (err) => {
-          console.error(err.message);
-          this.isError = true;
-          this.isLoading = false;
-        },
-        complete: () => {
-          this.isLoading = false;
-        },
-      });
+        }
+      },
+      error: (err) => {
+        this.showError(err);
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
   }
 
+  showError(err?: Error) {
+    console.error(err?.message);
+    this.isError = true;
+    this.isLoading = false;
+    this.snackBar.openFromComponent(SnackBarContentComponent, {
+      data: {
+        content: 'Error searching users',
+        success: false,
+      },
+      duration: 4000,
+    });
+  }
   pollForUser() {
     const snackBar = this.snackBar.openFromComponent(SnackBarContentComponent, {
       data: { content: 'Still processing...', success: true },
