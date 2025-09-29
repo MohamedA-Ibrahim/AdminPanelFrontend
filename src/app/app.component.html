@@ -32,6 +32,12 @@
       </button>
       <span>AdminPanelFrontend</span>
       <span class="spacer"></span>
+      @if (showGrpcButton) {
+        <button mat-button (click)="openGrpcDialog()">
+          <mat-icon>api</mat-icon>
+          Try gRPC
+        </button>
+      }
       @if (isLoggedIn) {
         <span class="welcome-text">Welcome, {{userName}}!</span>
         <button mat-button (click)="logout()">
