@@ -1,4 +1,4 @@
-// source: src/app/grpc/protos/user.proto
+// source: user.proto
 /**
  * @fileoverview
  * @enhanceable
@@ -11,7 +11,8 @@
 /* eslint-disable */
 // @ts-nocheck
 
-var jspb = require('google-protobuf');
+import * as jspb from 'google-protobuf';
+
 var goog = jspb;
 var global =
     (typeof globalThis !== 'undefined' && globalThis) ||
